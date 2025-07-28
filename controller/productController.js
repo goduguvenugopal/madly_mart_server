@@ -44,6 +44,7 @@ const saveProductController = async (request, response) => {
         .json({ message: "products details are required" });
     }
 
+    
     const itemImage = files.map((file) => ({
       image: file.path,
       public_id: file.filename,
