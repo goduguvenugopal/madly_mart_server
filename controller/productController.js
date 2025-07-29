@@ -40,7 +40,7 @@ const saveProductController = async (request, response) => {
       !itemSubCategory
     ) {
       return response
-        .status(404)
+        .status(400)
         .json({ message: "products details are required" });
     }
 
