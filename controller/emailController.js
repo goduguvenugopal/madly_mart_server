@@ -42,10 +42,10 @@ const sendMail = async (request, response) => {
           <body>
             <h2>Welcome to Dora A-Z Fresh!</h2>
             <p>Dear ${fullName},</p>
-            <p>Your Login code for logging in to your madly-mart account is: <h3>${otp}</h3></p>
+            <p>Your Login code for logging in to your Madly Mart account is: <h3>${otp}</h3></p>
             <p><em>Please do not share this Login code with anyone.</em></p>
-            <p>Thank you for choosing madly mart</p>
-            <p>Best regards,<br />The madly mart</p>
+            <p>Thank you for choosing Madly Mart</p>
+            <p>Best regards,<br />The Madly Mart</p>
           </body>
         </html>
       `,

@@ -1,5 +1,6 @@
 const Product = require("../model/Product");
 const User = require("../model/User");
+const { cloudinary } = require("../config/cloudinary");
 
 //  save product details controller
 const saveProductController = async (request, response) => {
@@ -44,13 +45,11 @@ const saveProductController = async (request, response) => {
         .json({ message: "products details are required" });
     }
 
-    
     const itemImage = files.map((file) => ({
       image: file.path,
       public_id: file.filename,
     }));
 
-    
     // creating object to save in database
     const saveProducts = new Product({
       itemName,
@@ -113,7 +112,7 @@ const getSingleProduct = async (request, response) => {
   }
 };
 
-// update product details
+// updating product
 const updateProductDetails = async (request, response) => {
   try {
     const userId = request.userId;
@@ -123,13 +122,83 @@ const updateProductDetails = async (request, response) => {
         .status(403)
         .json({ error: "this is restricted : admin only " });
     }
-    const productData = request.body;
+
+    const {
+      itemName,
+      itemDescription,
+      itemCost,
+      itemKgCost,
+      itemHalfKgCost,
+      itemQty,
+      minOrderQty,
+      itemWeight,
+      itemStock,
+      itemSubCategory,
+      itemCategory,
+      offerCost,
+      productTags,
+      offerMessage,
+      toKeepImages = [],
+    } = request.body;
 
     const { id } = request.params;
-    await Product.findByIdAndUpdate(id, { $set: productData }, { new: true });
+    const files = request.files;
+    const existedProductData = await Product.findById(id);
+
+    // Filter images to delete
+    const filteredImages = existedProductData.itemImage.filter(
+      (img) => !toKeepImages.includes(img.public_id)
+    );
+
+    // Delete filtered images from Cloudinary
+    for (const img of filteredImages) {
+      if (img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
+    }
+
+    // Filter images to keep
+    const existedImages = existedProductData.itemImage.filter((img) =>
+      toKeepImages.includes(img.public_id)
+    );
+
+    // New uploaded images
+    const newImages =
+      files?.map((file) => ({
+        image: file.path,
+        public_id: file.filename,
+      })) || [];
+
+    const updatedImages = [...existedImages, ...newImages];
+
+    // Update product
+    await Product.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          itemName,
+          itemDescription,
+          itemCost,
+          itemKgCost,
+          itemHalfKgCost,
+          itemQty,
+          minOrderQty,
+          itemWeight,
+          itemStock,
+          itemSubCategory,
+          itemCategory,
+          offerCost,
+          productTags,
+          offerMessage,
+          itemImage: updatedImages,
+        },
+      },
+      { new: true }
+    );
+
     return response
       .status(200)
-      .json({ message: "products updated successfully" });
+      .json({ message: "product updated successfully" });
   } catch (error) {
     console.error(error);
     return response
@@ -142,13 +211,30 @@ const updateProductDetails = async (request, response) => {
 const deleteProduct = async (request, response) => {
   try {
     const userId = request.userId;
+    const id = request.params.id;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
       return response
         .status(403)
         .json({ error: "this is restricted : admin only " });
     }
-    await Product.findByIdAndDelete(request.params.id);
+
+    const existedProduct = await Product.findById(id);
+    // checking if products exists
+    if (!existedProduct) {
+      return response.status(404).json({ error: "product not found" });
+    }
+
+    // deleting images in cloudinary by public id
+    for (const img of existedProduct.itemImage) {
+      if (img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
+    }
+
+    // deleting product by id
+    await Product.findByIdAndDelete(existedProduct._id);
+
     return response
       .status(200)
       .json({ message: "product deleted successfully" });
