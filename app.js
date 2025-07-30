@@ -22,16 +22,16 @@ app.use(cors())
 app.use(express.json());
 
 // route middlewares
-app.use("/email", emailRoute);
-app.use("/user", userRoute);
-app.use("/product", productRoute);
-app.use("/cart", cartRoute);
-app.use("/carousel", carouselRoute);
-app.use("/category", categoryRoute);
-app.use("/address", addressRoute);
-app.use("/order", orderRoute);
-app.use("/updates-email", updatesMailRoute);
-app.use("/offer", offerRoute);
+app.use("/api/email", emailRoute);
+app.use("/api/user", userRoute);
+app.use("/api/product", productRoute);
+app.use("/api/cart", cartRoute);
+app.use("/api/carousel", carouselRoute);
+app.use("/api/category", categoryRoute);
+app.use("/api/address", addressRoute);
+app.use("/api/order", orderRoute);
+app.use("/api/updates-email", updatesMailRoute);
+app.use("/api/offer", offerRoute);
 
 const PORT = process.env.PORT || 3000;
 

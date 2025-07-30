@@ -7,7 +7,7 @@ const upload = require("../utils/multer");
 router.post(
   "/save-category-products",
   verifyToken,
-  upload.single("images"),
+  upload.single("image"),
   categoryController.saveProductCategory
 );
 router.get("/get-category-products", categoryController.getAllCategoryProducts);
