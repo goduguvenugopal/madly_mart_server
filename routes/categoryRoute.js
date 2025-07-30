@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const categoryController = require("../controller/categoryController");
 const verifyToken = require("../utils/middleware");
- 
+const upload = require("../utils/multer");
 
 router.post(
   "/save-category-products",
   verifyToken,
+  upload.single("images"),
   categoryController.saveProductCategory
 );
 router.get("/get-category-products", categoryController.getAllCategoryProducts);
