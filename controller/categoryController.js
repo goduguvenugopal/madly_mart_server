@@ -16,15 +16,15 @@ const saveProductCategory = async (request, response) => {
     const { productCategoryName, available } = request.body;
     const file = request.file;
 
-    if (!productCategoryName || !available || !file?.path) {
+    if (!productCategoryName || !available) {
       return response
         .status(400)
         .json({ message: "category details are required" });
     }
 
     const productImage = {
-      image: file.path,
-      public_id: file.filename,
+      image: file?.path,
+      public_id: file?.filename,
     };
 
     const saveProductsInDb = new productCategory({
@@ -50,7 +50,7 @@ const getAllCategoryProducts = async (request, response) => {
   try {
     const retrievedProducts = await productCategory.find();
     return response.status(200).json({
-      message: "category products retrievd successfully",
+      message: "all categories retrievd successfully",
       retrievedProducts,
     });
   } catch (error) {

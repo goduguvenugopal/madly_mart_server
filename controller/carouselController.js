@@ -21,7 +21,7 @@ const saveCarousel = async (request, response) => {
     }
 
     // Extracting image info from uploaded files
-    const carouselImage = req.files.map((file) => ({
+    const carouselImage = request.files.map((file) => ({
       image: file.path || "",
       public_id: file.filename || "",
     }));
@@ -90,7 +90,7 @@ const updateCarousel = async (req, res) => {
 
     // Keep only the imagesToKeep in DB
     const filteredImages = existingCarousel.carouselImage.filter((img) =>
-      imagesToKeep.includes(img.public_id)
+      imagesToKeep?.includes(img.public_id)
     );
 
     // Add new uploaded images
@@ -100,7 +100,7 @@ const updateCarousel = async (req, res) => {
     }));
 
     existingCarousel.offerTitle = offerTitle || existingCarousel.offerTitle;
-    existingCarousel.carouselImage = [...filteredImages, ...newImages];
+    existingCarousel.carouselImage = imagesToKeep.length === 0 ? [...existingCarousel?.carouselImage , ...newImages]: [...filteredImages, ...newImages];
 
     await existingCarousel.save();
 

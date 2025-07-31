@@ -40,7 +40,7 @@ const sendMail = async (request, response) => {
       html: `
         <html>
           <body>
-            <h2>Welcome to Dora A-Z Fresh!</h2>
+            <h2>Welcome to Madly Mart!</h2>
             <p>Dear ${fullName},</p>
             <p>Your Login code for logging in to your Madly Mart account is: <h3>${otp}</h3></p>
             <p><em>Please do not share this Login code with anyone.</em></p>
