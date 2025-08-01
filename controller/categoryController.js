@@ -88,7 +88,6 @@ const updateCategoryProduct = async (request, response) => {
   }
 };
 
-
 // deleting the category 
  const deleteCategory = async (request, response) => {
   try {

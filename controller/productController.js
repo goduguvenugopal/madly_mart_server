@@ -13,7 +13,6 @@ const saveProductController = async (request, response) => {
         .status(403)
         .json({ error: "this is restricted : admin only " });
     }
-    const files = request.files;
     const {
       itemName,
       itemDescription,
@@ -34,20 +33,20 @@ const saveProductController = async (request, response) => {
     if (
       !itemName ||
       !itemCost ||
-      !files ||
       !itemCategory ||
       !itemStock ||
-      !productTags ||
-      !itemSubCategory
+      !itemSubCategory ||
+      productTags.length === 0
     ) {
       return response
         .status(400)
         .json({ message: "products details are required" });
     }
+    const files = request.files;
 
-    const itemImage = files.map((file) => ({
-      image: file.path,
-      public_id: file.filename,
+    const itemImage = files?.map((file) => ({
+      image: file?.path,
+      public_id: file?.filename,
     }));
 
     // creating object to save in database
@@ -146,7 +145,7 @@ const updateProductDetails = async (request, response) => {
     const existedProductData = await Product.findById(id);
 
     // Filter images to delete
-    const filteredImages = existedProductData.itemImage.filter(
+    const filteredImages = existedProductData?.itemImage?.filter(
       (img) => !toKeepImages.includes(img.public_id)
     );
 
@@ -165,11 +164,14 @@ const updateProductDetails = async (request, response) => {
     // New uploaded images
     const newImages =
       files?.map((file) => ({
-        image: file.path,
-        public_id: file.filename,
+        image: file?.path,
+        public_id: file?.filename,
       })) || [];
 
-    const updatedImages = [...existedImages, ...newImages];
+    const updatedImages =
+      toKeepImages.length === 0
+        ? [...existedProductData?.itemImage, ...newImages]
+        : [...existedImages, ...newImages];
 
     // Update product
     await Product.findByIdAndUpdate(
