@@ -77,6 +77,20 @@ const updateCategoryProduct = async (request, response) => {
       { $set: updateCategoryDetails },
       { new: true }
     );
+    const categoryItem = await productCategory.findById(request.params.id);
+    // Find all products that belong to this category
+    const categoryProducts = await Product.find({
+      itemCategory: categoryItem.productCategoryName,
+    });
+
+    // Update stock to 0 and save all
+    await Promise.all(
+      categoryProducts.map(async (item) => {
+        item.itemStock = "0";
+        await item.save();
+      })
+    );
+
     return response.status(201).json({
       message: "category products updated successfully",
     });
@@ -88,13 +102,15 @@ const updateCategoryProduct = async (request, response) => {
   }
 };
 
-// deleting the category 
- const deleteCategory = async (request, response) => {
+// deleting the category
+const deleteCategory = async (request, response) => {
   try {
     const userId = request.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
-      return response.status(403).json({ error: "only admin can delete category" });
+      return response
+        .status(403)
+        .json({ error: "only admin can delete category" });
     }
 
     // Find category from productCategory collection
@@ -105,7 +121,7 @@ const updateCategoryProduct = async (request, response) => {
 
     // Find all products that belong to this category
     const categoryProducts = await Product.find({
-      productCategoryName: categoryItem.productCategoryName,
+      itemCategory: categoryItem.productCategoryName,
     });
 
     // Update stock to 0 and save all
@@ -125,14 +141,16 @@ const updateCategoryProduct = async (request, response) => {
     await productCategory.findByIdAndDelete(categoryItem._id);
 
     return response.status(200).json({
-      message: "Category and related product stocks updated & deleted successfully",
+      message:
+        "Category and related product stocks updated & deleted successfully",
     });
   } catch (error) {
     console.error(error);
-    return response.status(500).json({ message: "Internal server error", error });
+    return response
+      .status(500)
+      .json({ message: "Internal server error", error });
   }
 };
-
 
 module.exports = {
   saveProductCategory,

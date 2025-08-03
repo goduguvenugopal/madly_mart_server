@@ -1,4 +1,5 @@
 const Order = require("../model/Order");
+const razorpayInstance = require("../config/razorpay");
 
 //  creating place order constroller
 const saveOrder = async (request, response) => {
@@ -31,8 +32,26 @@ const saveOrder = async (request, response) => {
       orderStatusDate: currentDate,
       orderDate: currentDate,
     });
-    await placeOrder.save();
-    return response.status(201).json({ message: "order placed successful" });
+
+    const newOrder = await placeOrder.save();
+
+    //  Create order in Razorpay
+    const options = {
+      amount: totalAmount * 100,
+      currency: "INR",
+      receipt: newOrder._id.toString(),
+    };
+
+    const razorpayOrder = await razorpayInstance.orders.create(options);
+    // sending to client
+    return response.status(201).json({
+      message: "order placed successful",
+      razorpay_order_id: razorpayOrder.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      mongoOrderId: newOrder._id,
+      razorpay_key_id: process.env.RAZORPAY_KEY_ID,
+    });
   } catch (error) {
     console.error(error);
     return response
@@ -59,12 +78,18 @@ const getAllOrders = async (request, response) => {
 // update order controller
 const orderUpdateController = async (request, response) => {
   try {
-    const { orderStatus } = request.body;
+    const { orderStatus, order_tracking_id } = request.body;
     const id = request.params.id;
     const orderUpdatedDate = new Date().toLocaleDateString("en-GB");
     await Order.findByIdAndUpdate(
       id,
-      { $set: { orderStatus: orderStatus, orderStatusDate: orderUpdatedDate } },
+      {
+        $set: {
+          orderStatus: orderStatus,
+          orderStatusDate: orderUpdatedDate,
+          order_tracking_id: order_tracking_id,
+        },
+      },
       { new: true }
     );
     return response.status(200).json({
