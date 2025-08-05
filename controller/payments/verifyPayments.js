@@ -44,6 +44,7 @@ const verifyPayment = async (req, res) => {
             razorpay_order_id,
             razorpay_signature,
             paymentStatus: "paid",
+            orderStatus : "confirmed"
           },
         },
         { new: true }
