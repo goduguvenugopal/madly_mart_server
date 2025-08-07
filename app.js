@@ -16,6 +16,8 @@ const updatesMailRoute = require("./routes/updatesMailRoute");
 const offerRoute = require("./routes/offerRoute");
 const paymentsRoute = require("./routes/payments/paymentsRoute");
 const failedPaymentsRoute = require("./routes/payments/failedPaymentsRoute");
+const reviewRoute = require("./routes/reviews/reviewRoute");
+
 // middlewares
 // app.use(cors(corsOptions));
 app.use(cors());
@@ -34,6 +36,7 @@ app.use("/api/updates-email", updatesMailRoute);
 app.use("/api/offer", offerRoute);
 app.use("/api", paymentsRoute);
 app.use("/api", failedPaymentsRoute);
+app.use("/api", reviewRoute);
 
 const PORT = process.env.PORT || 3000;
 
