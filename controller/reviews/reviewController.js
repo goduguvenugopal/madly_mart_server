@@ -4,8 +4,8 @@ const Review = require("../../model/reviews/review");
 // POST /api/reviews - Create a new review
 const createReview = async (req, res) => {
   try {
-    const { productId, userId, userName, rating, reviewText } = req.body;
-
+    const { productId, userName, rating, reviewText } = req.body;
+    const userId = request.userId;
     if (!productId || !userId || !userName || !rating || !reviewText) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -51,7 +51,13 @@ const getReviewsByProduct = async (req, res) => {
 const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
-
+    const userId = request.userId;
+    const isExistUser = await User.findById(userId);
+    if (isExistUser.role !== "admin") {
+      return response
+        .status(403)
+        .json({ error: "this is restricted : admin only " });
+    }
     const review = await Review.findById(id);
     if (!review) {
       return res.status(404).json({ message: "Review not found" });

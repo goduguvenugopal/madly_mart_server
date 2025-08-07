@@ -5,7 +5,7 @@ const { cloudinary } = require("../config/cloudinary");
 //  save product details controller
 const saveProductController = async (request, response) => {
   try {
-    // user can only add products
+    // admin can only add products
     const userId = request.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
