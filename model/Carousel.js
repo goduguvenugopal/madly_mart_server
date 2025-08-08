@@ -5,14 +5,11 @@ const carouselSchema = new mongoose.Schema({
   offerTitle: {
     type: String,
   },
-  subTitle: {
-    type: String,
-  },
   carouselImage: [
     {
       image: { type: String, default: "" },
       public_id: { type: String, default: "" },
-      redirectUrl: { type: String, default: "" },
+       
     },
   ],
 });

@@ -43,9 +43,9 @@ const saveProductController = async (request, response) => {
         .json({ message: "products details are required" });
     }
 
-  // parsing the array of variants objects 
-   const  parsedVariants = variants.map((v) => JSON.parse(v));
- 
+    // parsing the array of variants objects
+    const parsedVariants = await variants?.map((v) => JSON.parse(v));
+    const parsedDescriptionPoints = JSON.parse(descriptionPoints);
 
     const files = request.files;
 
@@ -58,7 +58,7 @@ const saveProductController = async (request, response) => {
     const saveProducts = new Product({
       itemName,
       itemDescription,
-      descriptionPoints,
+      descriptionPoints : parsedDescriptionPoints,
       itemCost,
       itemImage,
       itemQty,
@@ -69,7 +69,7 @@ const saveProductController = async (request, response) => {
       offerCost,
       offerMessage,
       productTags,
-      variants : parsedVariants,
+      variants: parsedVariants,
     });
     await saveProducts.save();
 
@@ -147,8 +147,9 @@ const updateProductDetails = async (request, response) => {
     const files = request.files;
     const existedProductData = await Product.findById(id);
 
-  // parsing the array of variants objects 
-   const  parsedVariants = variants.map((v) => JSON.parse(v));
+    // parsing the array of variants objects
+    const parsedVariants = await variants?.map((v) => JSON.parse(v));
+    const parsedDescriptionPoints = JSON.parse(descriptionPoints);
 
     // Filter images to delete
     const filteredImages = existedProductData?.itemImage?.filter(
@@ -186,7 +187,7 @@ const updateProductDetails = async (request, response) => {
         $set: {
           itemName,
           itemDescription,
-          descriptionPoints,
+          descriptionPoints: parsedDescriptionPoints,
           itemCost,
           itemQty,
           minOrderQty,
@@ -196,7 +197,7 @@ const updateProductDetails = async (request, response) => {
           offerCost,
           offerMessage,
           productTags,
-          variants : parsedVariants,
+          variants: parsedVariants,
           itemImage: updatedImages,
         },
       },
