@@ -1,6 +1,7 @@
 const Product = require("../model/Product");
 const User = require("../model/User");
 const { cloudinary } = require("../config/cloudinary");
+const { array } = require("../utils/multer");
 
 //  save product details controller
 const saveProductController = async (request, response) => {
@@ -41,6 +42,11 @@ const saveProductController = async (request, response) => {
         .status(400)
         .json({ message: "products details are required" });
     }
+
+  // parsing the array of variants objects 
+   const  parsedVariants = variants.map((v) => JSON.parse(v));
+ 
+
     const files = request.files;
 
     const itemImage = files?.map((file) => ({
@@ -63,7 +69,7 @@ const saveProductController = async (request, response) => {
       offerCost,
       offerMessage,
       productTags,
-      variants,
+      variants : parsedVariants,
     });
     await saveProducts.save();
 
@@ -141,6 +147,9 @@ const updateProductDetails = async (request, response) => {
     const files = request.files;
     const existedProductData = await Product.findById(id);
 
+  // parsing the array of variants objects 
+   const  parsedVariants = variants.map((v) => JSON.parse(v));
+
     // Filter images to delete
     const filteredImages = existedProductData?.itemImage?.filter(
       (img) => !toKeepImages.includes(img.public_id)
@@ -187,7 +196,7 @@ const updateProductDetails = async (request, response) => {
           offerCost,
           offerMessage,
           productTags,
-          variants,
+          variants : parsedVariants,
           itemImage: updatedImages,
         },
       },

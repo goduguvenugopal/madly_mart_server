@@ -19,8 +19,8 @@ const failedPaymentsRoute = require("./routes/payments/failedPaymentsRoute");
 const reviewRoute = require("./routes/reviews/reviewRoute");
 
 // middlewares
-app.use(cors(corsOptions));
-// app.use(cors());
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // global route register middlewares
