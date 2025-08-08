@@ -43,7 +43,7 @@ const sendMail = async (request, response) => {
             <h2>Welcome to Madly Mart!</h2>
             <img src="https://madlymartadmin.vercel.app/MadlyMart.png" width="300px" alt="company logo"/>
             <p>Dear ${fullName},</p>
-            <p>Your Login code for logging in to your Madly Mart account is: <h3>${otp}</h3></p>
+            <p>Your Login code for logging in to your Madly Mart account is: <h2>${otp}</h2></p>
             <p><em>Please do not share this Login code with anyone.</em></p>
             <p>Thank you for choosing Madly Mart</p>
             <p>Best regards,<br />The Madly Mart</p>

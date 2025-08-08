@@ -3,7 +3,7 @@ const Cart = require("../model/Cart");
 // creating cart products save controller
 const addToCart = async (request, response) => {
   try {
-    const { products, productId, totalAmount, itemQty, orderType } =
+    const { products, productId, totalAmount, itemQty } =
       request.body;
     const decodedId = request.userId;
     if (!decodedId) {
@@ -16,7 +16,7 @@ const addToCart = async (request, response) => {
       productId,
       totalAmount,
       itemQty,
-      orderType,
+       
     });
 
     await saveCartProducts.save();

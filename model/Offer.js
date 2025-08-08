@@ -2,16 +2,13 @@ const mongoose = require("mongoose");
 
 // creating offers schema
 const offersSchema = new mongoose.Schema({
-  sevenDays: {
-    type: Number,
+   adsPopUp: {
+    type: String,
   },
-  tenDays: {
-    type: Number,
+  couponCode: {
+    type: String,
   },
-  twentyDays: {
-    type: Number,
-  },
-  thirtyDays: {
+  discount: {
     type: Number,
   },
   deliveryCharges: {

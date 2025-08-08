@@ -11,18 +11,13 @@ const createOffer = async (req, res) => {
         .status(403)
         .json({ error: "this is restricted : admin only " });
     }
-    const { sevenDays, tenDays, twentyDays, thirtyDays, deliveryCharges } =
-      req.body;
+    const { adsPopUp, discount, couponCode, deliveryCharges } = req.body;
     const existOffer = await Offer.find();
     if (existOffer.length > 0) {
       return res.status(409).json({ message: "Offer already exists." });
     }
     const newOffer = new Offer({
-      sevenDays,
-      tenDays,
-      twentyDays,
-      thirtyDays,
-      deliveryCharges,
+       adsPopUp, discount, couponCode, deliveryCharges 
     });
     await newOffer.save();
     res.status(201).json({ message: "offer created successfully" });

@@ -5,7 +5,7 @@ const User = require("../model/User");
 // creating Carousel  controller
 const saveCarousel = async (request, response) => {
   try {
-    const { offerTitle } = request.body;
+    const { offerTitle ,subTitle } = request.body;
     const userId = request.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
@@ -28,6 +28,7 @@ const saveCarousel = async (request, response) => {
 
     const saveImages = new Carousel({
       offerTitle,
+      subTitle,
       carouselImage,
     });
     await saveImages.save();
@@ -62,7 +63,7 @@ const getCarousel = async (request, response) => {
 const updateCarousel = async (req, res) => {
   try {
     const userId = req.userId;
-    const { offerTitle, imagesToKeep = [] } = req.body;
+    const { offerTitle ,subTitle, imagesToKeep = [] } = req.body;
 
     const user = await User.findById(userId);
     if (!user || user.role !== "admin") {
@@ -100,6 +101,7 @@ const updateCarousel = async (req, res) => {
     }));
 
     existingCarousel.offerTitle = offerTitle || existingCarousel.offerTitle;
+    existingCarousel.offerTitle = subTitle || existingCarousel.subTitle;
     existingCarousel.carouselImage = imagesToKeep.length === 0 ? [...existingCarousel?.carouselImage , ...newImages]: [...filteredImages, ...newImages];
 
     await existingCarousel.save();

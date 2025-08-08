@@ -10,16 +10,16 @@ const productSchema = mongoose.Schema({
   itemDescription: {
     type: String,
   },
+  descriptionPoints: {
+    type: Array,
+    default: [],
+  },
+
   itemCost: {
     type: String,
     required: true,
   },
-  itemHalfKgCost: {
-    type: String,
-  },
-  itemKgCost: {
-    type: String,
-  },
+
   itemImage: {
     type: [
       {
@@ -36,10 +36,7 @@ const productSchema = mongoose.Schema({
   minOrderQty: {
     type: String,
   },
-  itemWeight: {
-    type: Array,
-    default: [],
-  },
+
   itemStock: {
     type: String,
     required: true,
@@ -61,6 +58,20 @@ const productSchema = mongoose.Schema({
   productTags: {
     type: Array,
     required: true,
+    default: [],
+  },
+  variants: {
+    type: [
+      {
+        color: String,
+        capacity: String,
+        size: String,
+        weight: String,
+        originalCost: Number,
+        sellingCost: Number,
+        stock: Number,
+      },
+    ],
     default: [],
   },
 });
