@@ -64,7 +64,7 @@ const getAllCategoryProducts = async (request, response) => {
 // update category controller
 const updateCategoryProduct = async (request, response) => {
   try {
-    const updateCategoryDetails = request.body;
+    const { available } = request.body;
     const userId = request.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
@@ -74,7 +74,7 @@ const updateCategoryProduct = async (request, response) => {
     }
     await productCategory.findByIdAndUpdate(
       request.params.id,
-      { $set: updateCategoryDetails },
+      { $set: { available: available } },
       { new: true }
     );
     const categoryItem = await productCategory.findById(request.params.id);
@@ -84,13 +84,21 @@ const updateCategoryProduct = async (request, response) => {
     });
 
     // Update stock to 0 and save all
-    await Promise.all(
-      categoryProducts.map(async (item) => {
-        item.itemStock = "0";
-        await item.save();
-      })
-    );
-
+    if (available === "no") {
+      await Promise.all(
+        categoryProducts.map(async (item) => {
+          item.itemStock = "0";
+          await item.save();
+        })
+      );
+    } else {
+      await Promise.all(
+        categoryProducts.map(async (item) => {
+          item.itemStock = "10";
+          await item.save();
+        })
+      );
+    }
     return response.status(201).json({
       message: "category products updated successfully",
     });
