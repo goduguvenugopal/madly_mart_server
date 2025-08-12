@@ -3,8 +3,16 @@ const Cart = require("../model/Cart");
 // creating cart products save controller
 const addToCart = async (request, response) => {
   try {
-    const { products, productId, totalAmount, itemQty } =
-      request.body;
+    const {
+      products,
+      productId,
+      totalAmount,
+      itemQty,
+      color,
+      capacity,
+      weight,
+      size,
+    } = request.body;
     const decodedId = request.userId;
     if (!decodedId) {
       return response.status(404).json({ message: "userId required" });
@@ -16,7 +24,10 @@ const addToCart = async (request, response) => {
       productId,
       totalAmount,
       itemQty,
-       
+      color,
+      capacity,
+      weight,
+      size,
     });
 
     await saveCartProducts.save();
