@@ -6,6 +6,9 @@ const cartSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  stock: {
+    type: String,
+  },
   color: {
     type: String,
   },
