@@ -10,7 +10,7 @@ const shippingAddressSchema = new mongoose.Schema({
     required: true,
   },
   phone: {
-    type: String,
+    type: Number,
     required: true,
   },
   email: {
@@ -34,7 +34,7 @@ const shippingAddressSchema = new mongoose.Schema({
     required: true,
   },
   postalCode: {
-    type: String,
+    type: Number,
     required: true,
   },
 });

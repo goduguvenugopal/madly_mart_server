@@ -18,7 +18,7 @@ const saveAddressController = async (request, response) => {
       !district
     ) {
       return response
-        .status(404)
+        .status(400)
         .json({ message: "shipping address details required" });
     }
 
