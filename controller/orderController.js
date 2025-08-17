@@ -11,6 +11,7 @@ const saveOrder = async (request, response) => {
       orderStatus,
       totalAmount,
       delayMessage,
+      deliveryCharges,
     } = request.body;
     if (
       !id ||
@@ -27,6 +28,7 @@ const saveOrder = async (request, response) => {
       orderedProdcuts,
       shippingAddress,
       orderStatus,
+      deliveryCharges,
       delayMessage,
       totalAmount,
       orderStatusDate: currentDate,
@@ -43,6 +45,17 @@ const saveOrder = async (request, response) => {
     };
 
     const razorpayOrder = await razorpayInstance.orders.create(options);
+
+    await Order.findByIdAndUpdate(
+      newOrder._id,
+      {
+        $set: {
+          razorpay_order_id: razorpayOrder.id,
+          razorpay_key_id: process.env.RAZORPAY_KEY_ID,
+        },
+      },
+      { new: true }
+    );
     // sending to client
     return response.status(201).json({
       message: "order placed successful",

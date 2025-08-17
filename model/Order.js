@@ -33,6 +33,9 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    deliveryCharges: {
+      type: Number,
+    },
     delayMessage: {
       type: String,
     },
@@ -41,15 +44,19 @@ const orderSchema = new mongoose.Schema(
       default: "created",
       required: true,
     },
-     razorpay_signature : {
-       type: String,
+    razorpay_signature: {
+      type: String,
       default: "",
-     },
+    },
     razorpay_payment_id: {
       type: String,
       default: "",
     },
     razorpay_order_id: {
+      type: String,
+      default: "",
+    },
+    razorpay_key_id: {
       type: String,
       default: "",
     },

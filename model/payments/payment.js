@@ -16,7 +16,7 @@ const paymentSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      default: "created",
+      default: "paid",
       required: true,
     },
     razorpay_payment_id: {
