@@ -9,6 +9,7 @@ const postFailedPaymentController = async (req, res) => {
       userEmail,
       mongoOrderId,
       error,
+      totalAmount
     } = req.body;
 
     const failedPayment = new FailedPayment({
@@ -16,6 +17,7 @@ const postFailedPaymentController = async (req, res) => {
       razorpay_payment_id,
       userEmail,
       mongoOrderId,
+      totalAmount,
       error,
     });
 
