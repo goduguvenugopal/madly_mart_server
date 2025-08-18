@@ -33,24 +33,47 @@ const sendMail = async (request, response) => {
 
     // mailOptions
     const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Your One-Time Code for Secure Login",
-      text: `Hello ${fullName},\n\nYour login code is: ${otp}\nPlease do not share this with anyone.`,
-      html: `
-        <html>
-          <body>
-            <h2>Welcome to Madly Mart!</h2>
-            <img src="https://madlymartadmin.vercel.app/MadlyMart.jpg" width="300px" alt="company logo"/>
-            <p>Dear ${fullName},</p>
-            <p>Your Login code for logging in to your Madly Mart account is: <h2>${otp}</h2></p>
-            <p><em>Please do not share this Login code with anyone.</em></p>
-            <p>Thank you for choosing Madly Mart</p>
-            <p>Best regards,<br />The Madly Mart</p>
-          </body>
-        </html>
-      `,
-    };
+  from: process.env.EMAIL_USER,
+  to: email,
+  subject: "🔐 Your One-Time Code for Secure Login - Madly Mart",
+  text: `Hello ${fullName},\n\nYour login code is: ${otp}\nPlease do not share this with anyone.\n\nThank you,\nMadly Mart`,
+  html: `
+    <html>
+      <body style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px; color: #333;">
+        <div style="max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+          
+          <img src="https://madlymartadmin.vercel.app/MadlyMart.jpg" alt="Madly Mart" style="max-width: 180px; margin-bottom: 20px;" />
+          
+          <h2 style="color: #2c3e50;">Welcome to Madly Mart, ${fullName}!</h2>
+          
+          <p style="font-size: 16px; color: #555; margin: 15px 0;">
+            Use the following login code to securely access your account:
+          </p>
+          
+          <div style="background: #f4f6f9; border: 2px dashed #4cafef; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h1 style="color: #1a73e8; font-size: 28px; margin: 0;">${otp}</h1>
+          </div>
+          
+          <p style="font-size: 14px; color: #e74c3c; font-style: italic; margin-bottom: 20px;">
+            ⚠️ Please do not share this code with anyone.
+          </p>
+          
+          <p style="font-size: 15px; color: #555;">
+            Thank you for choosing <strong>Madly Mart</strong>.<br/>
+            We’re glad to have you with us.
+          </p>
+          
+          <hr style="margin: 25px 0; border: none; border-top: 1px solid #eee;" />
+          
+          <p style="font-size: 13px; color: #888;">
+            Best regards,<br/>
+            <strong>The Madly Mart Team</strong>
+          </p>
+        </div>
+      </body>
+    </html>
+  `,
+};
 
     await transporter.sendMail(mailOptions);
     return response
