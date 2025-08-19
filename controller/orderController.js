@@ -1,5 +1,6 @@
 const Order = require("../model/Order");
 const razorpayInstance = require("../config/razorpay");
+const Cart = require("../model/Cart");
 
 //  creating place order constroller
 const saveOrder = async (request, response) => {
@@ -56,6 +57,16 @@ const saveOrder = async (request, response) => {
       },
       { new: true }
     );
+
+    // delete ordered products which are in user cart
+    const productsIdInCart = orderedProdcuts?.map((itemId) => itemId.productId);
+
+    // delete the all by using deleteMany method based on userId and matched productId
+    await Cart.deleteMany({
+      userId: id,
+      productId: { $in: productsIdInCart },
+    });
+
     // sending to client
     return response.status(201).json({
       message: "order placed successful",
