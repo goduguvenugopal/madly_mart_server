@@ -6,6 +6,7 @@ const secretKey = process.env.SECRETKEY;
 const verifyToken = (request, response, next) => {
   try {
     const token = request.headers.token;
+    
     if (!token) {
       return response.status(404).json({ message: "token not found" });
     }

@@ -5,7 +5,7 @@ const Review = require("../../model/reviews/review");
 const createReview = async (req, res) => {
   try {
     const { productId, userName, rating, reviewText } = req.body;
-    const userId = request.userId;
+    const userId = req.userId;
     if (!productId || !userId || !userName || !rating || !reviewText) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -51,7 +51,7 @@ const getReviewsByProduct = async (req, res) => {
 const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = request.userId;
+    const userId = req.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
       return response
