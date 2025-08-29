@@ -44,6 +44,10 @@ const orderSchema = new mongoose.Schema(
       default: "created",
       required: true,
     },
+    paymentDescription: {
+      type: String,
+      default: "",
+    },
     razorpay_signature: {
       type: String,
       default: "",

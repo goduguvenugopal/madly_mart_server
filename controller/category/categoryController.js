@@ -1,7 +1,7 @@
-const productCategory = require("../model/ProductCategory");
-const User = require("../model/User");
-const Product = require("../model/Product");
-const { cloudinary } = require("../config/cloudinary");
+const productCategory = require("../../model/category/ProductCategory");
+const User = require("../../model/User");
+const Product = require("../../model/Product");
+const { cloudinary } = require("../../config/cloudinary");
 
 // creating product category controller
 const saveProductCategory = async (request, response) => {

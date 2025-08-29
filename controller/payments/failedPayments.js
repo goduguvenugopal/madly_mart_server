@@ -1,6 +1,7 @@
+const Order = require("../../model/Order");
 const FailedPayment = require("../../model/payments/failedPayment");
 
-// save failed payments 
+// save failed payments
 const postFailedPaymentController = async (req, res) => {
   try {
     const {
@@ -9,7 +10,7 @@ const postFailedPaymentController = async (req, res) => {
       userEmail,
       mongoOrderId,
       error,
-      totalAmount
+      totalAmount,
     } = req.body;
 
     const failedPayment = new FailedPayment({
@@ -22,6 +23,13 @@ const postFailedPaymentController = async (req, res) => {
     });
 
     await failedPayment.save();
+
+    // retrieve order and update payment description
+    let order = await Order.findById(mongoOrderId);
+    order.paymentDescription = error.description;
+
+    // and save updated document
+    await order.save();
 
     return res.status(201).json({
       success: true,
@@ -38,8 +46,7 @@ const postFailedPaymentController = async (req, res) => {
   }
 };
 
- 
-// get failed payments 
+// get failed payments
 const getFailedPaymentsController = async (req, res) => {
   try {
     const failedPayments = await FailedPayment.find().sort({ createdAt: -1 });
@@ -59,4 +66,4 @@ const getFailedPaymentsController = async (req, res) => {
   }
 };
 
-module.exports = {getFailedPaymentsController ,postFailedPaymentController}
+module.exports = { getFailedPaymentsController, postFailedPaymentController };
