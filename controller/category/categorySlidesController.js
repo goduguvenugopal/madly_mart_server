@@ -5,15 +5,15 @@ const User = require("../../model/User");
 const addCategorySlides = async (req, res) => {
   try {
     const { categorySlides } = req.body;
-    const userId = request.userId;
+    const userId = req.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
-      return response.status(403).json({ error: "only admin have permission" });
+      return res.status(403).json({ error: "only admin have permission" });
     }
 
     // checking if document is existed
     const isExist = await CategorySlide.find();
-    if (isExist) {
+    if (isExist.length >= 1) {
       return res.status(400).json({ message: "already slides existed" });
     }
 
@@ -26,9 +26,7 @@ const addCategorySlides = async (req, res) => {
       .json({ message: "add category slides successfully" });
   } catch (error) {
     console.error(error);
-    return response
-      .status(500)
-      .json({ message: "internal server error", error });
+    return res.status(500).json({ message: "internal server error", error });
   }
 };
 
@@ -41,26 +39,23 @@ const getCategorySlides = async (req, res) => {
       .json({ message: "category slides fetched sucessfully", categorySlides });
   } catch (error) {
     console.error(error);
-    return response
-      .status(500)
-      .json({ message: "internal server error", error });
+    return res.status(500).json({ message: "internal server error", error });
   }
 };
 
 // update slides controller
 const updateCategorySlides = async (req, res) => {
   try {
-    const { updatedSlides } = req.body;
+    const { categorySlides } = req.body;
     const id = req.params.id;
-    const userId = request.userId;
+    const userId = req.userId;
     const isExistUser = await User.findById(userId);
     if (isExistUser.role !== "admin") {
-      return response.status(403).json({ error: "only admin have permission" });
+      return res.status(403).json({ error: "only admin have permission" });
     }
-
     await CategorySlide.findByIdAndUpdate(
       id,
-      { $set: updatedSlides },
+      { $set: { categorySlides: categorySlides } },
       { new: true }
     );
     return res
@@ -68,9 +63,7 @@ const updateCategorySlides = async (req, res) => {
       .json({ message: "updated category slides successfully" });
   } catch (error) {
     console.error(error);
-    return response
-      .status(500)
-      .json({ message: "internal server error", error });
+    return res.status(500).json({ message: "internal server error", error });
   }
 };
 

@@ -10,7 +10,7 @@ router.post(
 );
 router.get("/get-category-slides", categorySlidesController.getCategorySlides);
 router.put(
-  "/update-category-slides",
+  "/update-category-slides/:id",
   verifyToken,
   categorySlidesController.updateCategorySlides
 );
